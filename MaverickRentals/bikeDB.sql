@@ -27,7 +27,7 @@ CREATE TABLE Bike (
 );
 
 CREATE TABLE Reservation (
-                             reservationId INT NOT NULL PRIMARY KEY,
+                             reservationId INT NOT NULL PRIMARY KEY auto_increment,
                              startTime DATETIME NOT NULL,
                              endTime DATETIME DEFAULT NULL,
                              startStationId INT NOT NULL,
