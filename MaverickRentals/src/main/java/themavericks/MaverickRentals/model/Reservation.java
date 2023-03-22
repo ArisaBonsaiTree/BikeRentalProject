@@ -1,14 +1,14 @@
 package themavericks.MaverickRentals.model;
 
 import java.math.BigDecimal;
-import java.time.LocalTime;
+import java.sql.Time;
 import java.util.Objects;
 
 public class Reservation {
     private int reservationId;
     private int bikeId;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private Time startTime;
+    private Time endTime;
     private int startStationId;
     private int endStationId;
     private BigDecimal price;
@@ -20,22 +20,6 @@ public class Reservation {
 
     public void setReservationId(int reservationId) {
         this.reservationId = reservationId;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
     }
 
     public int getStartStationId() {
@@ -68,6 +52,22 @@ public class Reservation {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public Time getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Time startTime) {
+        this.startTime = startTime;
+    }
+
+    public Time getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Time endTime) {
+        this.endTime = endTime;
     }
 
 
