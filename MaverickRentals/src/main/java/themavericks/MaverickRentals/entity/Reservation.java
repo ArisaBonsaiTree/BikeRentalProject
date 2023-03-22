@@ -2,11 +2,12 @@ package themavericks.MaverickRentals.entity;
 
 import java.math.BigDecimal;
 import java.sql.Time;
+import java.time.LocalDateTime;
 
 public class Reservation {
     private int reservationId;
-    private Time startTime;
-    private Time endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private int startStationId;
     private Integer endStationId;
     private BigDecimal price;
@@ -24,19 +25,19 @@ public class Reservation {
         this.reservationId = reservationId;
     }
 
-    public Time getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public Time getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
