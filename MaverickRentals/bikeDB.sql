@@ -40,67 +40,44 @@ CREATE TABLE Reservation (
                              FOREIGN KEY (bikeId) REFERENCES Bike(bikeId)
 );
 
-INSERT INTO Station (stationId, stationName, stationCapacity, stationAvailableBikes)
-VALUES
-    (1, 'Central Park', 20, 20),
-    (2, 'Brooklyn Bridge Park', 15, 15),
-    (3, 'Prospect Park', 25, 25);
+LOAD DATA INFILE "Station.csv"
+INTO TABLE bikesDB.Station
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
 
-INSERT INTO BikeType (bikeTypeId, typeName, bikePrice)
-VALUES
-    (1, 'City Bike', 15.00),
-    (2, 'Mountain Bike', 20.00),
-    (3, 'Electric Bike', 30.00),
-    (4, 'Road Bike', 25.00);
+LOAD DATA INFILE "BikeType.csv"
+INTO TABLE bikesDB.BikeType
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
 
-INSERT INTO Bike (bikeId, bikeTypeId, available, stationId)
-VALUES
-    (1, 1, true, 1),
-    (2, 1, true, 1),
-    (3, 2, true, 1),
-    (4, 2, true, 1),
-    (5, 3, true, 1),
-    (6, 3, true, 1),
-    (7, 3, true, 1),
-    (8, 4, true, 1),
-    (9, 4, true, 1),
-    (10, 1, true, 2),
-    (11, 1, true, 2),
-    (12, 1, true, 2),
-    (13, 2, true, 2),
-    (14, 2, true, 2),
-    (15, 3, true, 2),
-    (16, 4, true, 2),
-    (17, 4, true, 2),
-    (18, 4, true, 2),
-    (19, 1, true, 3),
-    (20, 1, true, 3),
-    (21, 1, true, 3),
-    (22, 2, true, 3),
-    (23, 2, true, 3),
-    (24, 2, true, 3),
-    (25, 3, true, 3),
-    (26, 3, true, 3),
-    (27, 3, true, 3),
-    (28, 3, true, 3),
-    (29, 4, true, 3),
-    (30, 4, true, 3);
+LOAD DATA INFILE "Bike.csv"
+INTO TABLE bikesDB.Bike
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA INFILE "Reservation.csv"
+INTO TABLE bikesDB.Reservation
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
 
 SELECT b.*, bt.typeName, bt.bikePrice
 FROM Bike b
          JOIN BikeType bt USING (bikeTypeId)
-WHERE b.stationId = 1 AND b.available = true;
+WHERE b.stationId = 17 AND b.available = true;
 
 SELECT * FROM Bike
                   JOIN BikeType USING (bikeTypeId)
-WHERE stationId = 1 AND available = true;
+WHERE stationId = 17 AND available = true;
 
-
-INSERT INTO Reservation (reservationId, startTime, startStationId, price, customerName, bikeId)
-VALUES
-    (1, '2022-03-23 08:00:00', 1, 15.00, 'John Smith', 4),
-    (2, '2022-03-23 08:15:00', 1, 18.00, 'Jane Doe', 5),
-    (3, '2022-03-23 09:30:00', 1, 20.00, 'Bob Johnson', 6);
 
 -- UPDATE Bike SET available = false WHERE bikeId IN (4, 5, 6);
 UPDATE Bike SET available = false WHERE bikeId = 4;
@@ -120,7 +97,7 @@ SELECT * FROM RESERVATION;
 
 SELECT * FROM Bike
                   JOIN BikeType USING (bikeTypeId)
-WHERE stationId = 1 AND available = true;
+WHERE stationId = 17 AND available = true;
 
 SELECT * FROM Bike
                   JOIN BikeType USING (bikeTypeId)
