@@ -1,4 +1,0 @@
-package themavericks.MaverickRentals.dao;
-
-public class BikeTypeDaoDB {
-}
