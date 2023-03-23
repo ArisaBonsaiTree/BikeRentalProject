@@ -6,7 +6,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import themavericks.MaverickRentals.entity.Bike;
 import themavericks.MaverickRentals.entity.BikeType;
+import themavericks.MaverickRentals.exception.CustomException;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -35,6 +37,20 @@ public class BikeDaoDB implements BikeDao{
         return jdbcTemplate.query(sql, new BikeRowMapper());
     }
 
+    @Override
+    public void updateBikeAvailability(int bikeId, boolean available) throws CustomException {
+        String sql = "UPDATE Bike SET available = ? WHERE bikeId = ?";
+        int updatedRows = jdbcTemplate.update(sql, available, bikeId);
+        if(updatedRows == 0){
+            throw new CustomException("Bike not found");
+        }
+    }
+
+    @Override
+    public BigDecimal getPricePerHour(int bikeId) {
+        String sql = "SELECT bt.bikePrice FROM Bike b JOIN BikeType bt ON b.bikeTypeId = bt.bikeTypeId WHERE b.bikeId = ?";
+        return jdbcTemplate.queryForObject(sql, BigDecimal.class, bikeId);
+    }
 
     public static final class BikeMapperWithJoin implements RowMapper<Bike>{
         @Override
@@ -76,6 +92,8 @@ public class BikeDaoDB implements BikeDao{
             return bike;
         }
     }
+
+
 
 
 }
