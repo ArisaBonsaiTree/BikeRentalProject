@@ -8,6 +8,7 @@ import themavericks.MaverickRentals.dao.BikeTypeDao;
 import themavericks.MaverickRentals.dao.ReservationDao;
 import themavericks.MaverickRentals.dao.StationDao;
 import themavericks.MaverickRentals.entity.Bike;
+import themavericks.MaverickRentals.entity.BikeType;
 import themavericks.MaverickRentals.entity.Reservation;
 import themavericks.MaverickRentals.exception.CustomException;
 
@@ -23,9 +24,9 @@ public class ServiceLayer {
     @Autowired
     BikeDao bikeDao;
 
-//    @Autowired
-//    BikeTypeDao bikeTypeDao;
-//
+    @Autowired
+    BikeTypeDao bikeTypeDao;
+
     @Autowired
     ReservationDao reservationDao;
 //
@@ -52,4 +53,14 @@ public class ServiceLayer {
         reservationDao.updateReservation(reservationId, endTime, endStationId, totalPrice);
         bikeDao.updateBikeAvailability(bikeId, true);
     }
+
+    public List<BikeType> getAllBikeTypes() {
+        return bikeTypeDao.getAllBikeTypes();
+    }
+
+    public BikeType getBikeTypeById(int bikeTypeId) {
+        return bikeTypeDao.getBikeTypeById(bikeTypeId);
+    }
+
+
 }

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import themavericks.MaverickRentals.entity.Bike;
+import themavericks.MaverickRentals.entity.BikeType;
 import themavericks.MaverickRentals.entity.Reservation;
 import themavericks.MaverickRentals.exception.CustomException;
 import themavericks.MaverickRentals.service.ServiceLayer;
@@ -50,6 +51,16 @@ public class Controller {
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/biketypes")
+    public List<BikeType> getAllBikeTypes() {
+        return serviceLayer.getAllBikeTypes();
+    }
+
+    @GetMapping("/biketype/{id}")
+    public BikeType getBikeTypeById(@PathVariable int id) {
+        return serviceLayer.getBikeTypeById(id);
     }
 
 }
