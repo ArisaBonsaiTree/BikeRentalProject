@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import themavericks.MaverickRentals.entity.Bike;
 import themavericks.MaverickRentals.entity.BikeType;
 import themavericks.MaverickRentals.entity.Reservation;
+import themavericks.MaverickRentals.entity.Station;
 import themavericks.MaverickRentals.exception.CustomException;
 import themavericks.MaverickRentals.service.ServiceLayer;
 
@@ -39,6 +40,23 @@ public class Controller {
         else{
             return ResponseEntity.ok(bikes);
         }
+    }
+
+    @GetMapping("station/{stationId}")
+    public ResponseEntity<List<Station>> findByStationId(@PathVariable int stationId) {
+        List<Station> stations = serviceLayer.getStationById(stationId);
+        if(stations.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        else{
+            return ResponseEntity.ok(stations);
+        }
+    }
+
+    @PostMapping("/createReservation")
+    public ResponseEntity<Reservation> createReservation(@RequestParam long numOfHours, int startStationId, String customerName, int bikeId) throws CustomException{
+        Reservation reservation = serviceLayer.addReservation(numOfHours, startStationId, customerName, bikeId);
+        return new ResponseEntity(reservation, HttpStatus.CREATED);
     }
 
     // PUT http://localhost:8080/reservation/{reservationId}?endTime={endTime}&endStationId={endStationId}&bikeId={bikeId}

@@ -10,6 +10,7 @@ import themavericks.MaverickRentals.dao.StationDao;
 import themavericks.MaverickRentals.entity.Bike;
 import themavericks.MaverickRentals.entity.BikeType;
 import themavericks.MaverickRentals.entity.Reservation;
+import themavericks.MaverickRentals.entity.Station;
 import themavericks.MaverickRentals.exception.CustomException;
 
 import java.math.BigDecimal;
@@ -29,9 +30,9 @@ public class ServiceLayer {
 
     @Autowired
     ReservationDao reservationDao;
-//
-//    @Autowired
-//    StationDao stationDao;
+
+    @Autowired
+    StationDao stationDao;
 
 
     public List<Bike> getAllBikesAtStation(int stationId){
@@ -44,9 +45,32 @@ public class ServiceLayer {
         return bikes;
     }
 
+    public List<Station> getStationById(int stationId) {return stationDao.findStationById(stationId);}
+
+    public Reservation addReservation(long numOfHours, int startStationId, String customerName, int bikeId) throws CustomException {
+        LocalDateTime startTime = LocalDateTime.now();
+        LocalDateTime endTime = startTime.plusHours(numOfHours);
+        Reservation reservation = new Reservation(startTime, startStationId, bikeId);
+        //reservation.setStartTime(startTime);
+
+//        System.out.println(reservation.getStartTime());
+//        System.out.println(reservation.getEndTime());
+//        BigDecimal pricePerHour = bikeDao.getPricePerHour(bikeId);
+//        BigDecimal durationHours = BigDecimal.valueOf(Duration.between(reservation.getStartTime(), endTime).toHours());
+//        BigDecimal totalPrice = durationHours.multiply(pricePerHour);
+        reservation.setCustomerName(customerName);
+        reservation.setPrice(BigDecimal.valueOf(0.00));
+        bikeDao.updateBikeAvailability(bikeId, false);
+        stationDao.updateStation(startStationId, true);
+
+
+        return reservationDao.addReservation(reservation);
+    }
+
     public void updateReservationAndBike(int reservationId, LocalDateTime endTime, int endStationId, int bikeId) throws CustomException {
         Reservation reservation = reservationDao.getReservation(reservationId);
         BigDecimal pricePerHour = bikeDao.getPricePerHour(bikeId);
+        System.out.println(reservation.getStartTime());
         BigDecimal durationHours = BigDecimal.valueOf(Duration.between(reservation.getStartTime(), endTime).toHours());
         BigDecimal totalPrice = durationHours.multiply(pricePerHour);
 

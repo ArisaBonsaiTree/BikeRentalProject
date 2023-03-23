@@ -17,6 +17,13 @@ public class Reservation {
     public Reservation() {
     }
 
+    public Reservation(LocalDateTime startTime, int startStationId, int bikeId) {
+        this.startTime = startTime;
+        this.startStationId = startStationId;
+        //this.endStationId = endStationId;
+        this.bikeId = bikeId;
+    }
+
     public int getReservationId() {
         return reservationId;
     }

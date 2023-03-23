@@ -3,14 +3,13 @@ package themavericks.MaverickRentals.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import themavericks.MaverickRentals.entity.Reservation;
 import themavericks.MaverickRentals.exception.CustomException;
 
 import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDateTime;
 
 @Repository
@@ -19,6 +18,26 @@ public class ReservationDaoDB implements ReservationDao{
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    @Override
+    public Reservation addReservation(Reservation reservation) {
+        String sql = "INSERT INTO Reservation(startTime, startStationId, price, customerName, bikeId) VALUES(?,?,?,?,?)";
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update((Connection conn) -> {
+            PreparedStatement preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setTimestamp(1, Timestamp.valueOf(reservation.getStartTime()));
+            //preparedStatement.setTimestamp(2, Timestamp.valueOf(reservation.getEndTime()));
+            preparedStatement.setInt(2, reservation.getStartStationId());
+            //preparedStatement.setInt(4, reservation.getEndStationId());
+            preparedStatement.setBigDecimal(3, reservation.getPrice());
+            preparedStatement.setString(4, reservation.getCustomerName());
+            preparedStatement.setInt(5, reservation.getBikeId());
+
+
+            return preparedStatement;
+        }, keyHolder);
+        reservation.setReservationId(keyHolder.getKey().intValue());
+        return reservation;
+    }
 
     @Override
     public void updateReservation(int reservationId, LocalDateTime endTime, int endStationId, BigDecimal price) throws CustomException {

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 public interface ReservationDao {
 
+    Reservation addReservation(Reservation reservation);
     void updateReservation(int reservationId, LocalDateTime endTime, int endStationId, BigDecimal price) throws CustomException;
 
     Reservation getReservation(int reservationId);
