@@ -5,11 +5,12 @@ import themavericks.MaverickRentals.exception.CustomException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface ReservationDao {
 
     Reservation addReservation(Reservation reservation);
     void updateReservation(int reservationId, LocalDateTime endTime, int endStationId, BigDecimal price) throws CustomException;
-
     Reservation getReservation(int reservationId);
+    public List<Reservation> getAllReservations();
 }

@@ -11,6 +11,7 @@ import themavericks.MaverickRentals.exception.CustomException;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public class ReservationDaoDB implements ReservationDao{
@@ -50,6 +51,14 @@ public class ReservationDaoDB implements ReservationDao{
     public Reservation getReservation(int reservationId) {
         String sql = "SELECT * FROM Reservation WHERE reservationId = ?";
         return jdbcTemplate.queryForObject(sql, new ReservationRowMapper(), reservationId);
+    }
+
+    @Override
+    public List<Reservation> getAllReservations() {
+        String sql = "SELECT * FROM Reservation r "
+                + "JOIN Station s ON r.startStationId = s.stationId  "
+                + "JOIN Bike b ON r.bikeId = b.bikeId;";
+        return jdbcTemplate.query(sql, new ReservationRowMapper());
     }
 
     private static class ReservationRowMapper implements RowMapper<Reservation> {

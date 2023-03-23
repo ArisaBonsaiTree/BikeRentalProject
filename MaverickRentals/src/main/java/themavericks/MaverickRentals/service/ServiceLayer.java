@@ -47,6 +47,10 @@ public class ServiceLayer {
 
     public List<Station> getStationById(int stationId) {return stationDao.findStationById(stationId);}
 
+    public List<Reservation> getAllReservations() {
+        return reservationDao.getAllReservations();
+    }
+
     public Reservation addReservation(long numOfHours, int startStationId, String customerName, int bikeId) throws CustomException {
         LocalDateTime startTime = LocalDateTime.now();
         LocalDateTime endTime = startTime.plusHours(numOfHours);

@@ -52,6 +52,17 @@ public class Controller {
             return ResponseEntity.ok(stations);
         }
     }
+    @GetMapping("/getReservation")
+    public ResponseEntity<List<Reservation>> getAllReservations(){
+        List<Reservation> reservations = serviceLayer.getAllReservations();
+
+        if(reservations.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        else{
+            return ResponseEntity.ok(reservations);
+        }
+    }
 
     @PostMapping("/createReservation")
     public ResponseEntity<Reservation> createReservation(@RequestParam long numOfHours, int startStationId, String customerName, int bikeId) throws CustomException{
