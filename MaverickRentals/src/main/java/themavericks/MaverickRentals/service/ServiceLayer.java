@@ -51,7 +51,7 @@ public class ServiceLayer {
         BigDecimal totalPrice = durationHours.multiply(pricePerHour);
 
         reservationDao.updateReservation(reservationId, endTime, endStationId, totalPrice);
-        bikeDao.updateBikeAvailability(bikeId, true);
+        bikeDao.updateBikeStatus(bikeId, true, endStationId);
     }
 
     public List<BikeType> getAllBikeTypes() {
