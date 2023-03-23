@@ -47,6 +47,15 @@ public class BikeDaoDB implements BikeDao{
     }
 
     @Override
+    public void updateBikeStatus(int bikeId, boolean available, int stationId) throws CustomException {
+        String sql = "UPDATE Bike SET available = ?, stationId = ? WHERE bikeId = ?";
+        int updatedRows = jdbcTemplate.update(sql, available, stationId, bikeId);
+        if (updatedRows == 0) {
+            throw new CustomException("Bike not found");
+        }
+    }
+
+    @Override
     public BigDecimal getPricePerHour(int bikeId) {
         String sql = "SELECT bt.bikePrice FROM Bike b JOIN BikeType bt ON b.bikeTypeId = bt.bikeTypeId WHERE b.bikeId = ?";
         return jdbcTemplate.queryForObject(sql, BigDecimal.class, bikeId);
