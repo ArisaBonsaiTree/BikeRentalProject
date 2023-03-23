@@ -1,24 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+// https://stackoverflow.com/questions/63124161/attempted-import-error-switch-is-not-exported-from-react-router-dom
+import { BrowserRouter as Router, Routes , Route } from 'react-router-dom';
+import Home from './Home';
+import CreateReservation from './CreateReservation';
+import EditReservation from './EditReservation';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route path="/create-reservation" element={<CreateReservation/>} />
+        <Route path="/edit-reservation" element={<EditReservation/>} />
+      </Routes>
+    </Router>
   );
 }
 
