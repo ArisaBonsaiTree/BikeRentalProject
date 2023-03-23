@@ -91,4 +91,11 @@ public class ServiceLayer {
     }
 
 
+    public Reservation findReservationById(int reservationId) {
+        return reservationDao.getReservation(reservationId);
+    }
+
+    public List<Station> findAllStations() {
+        return stationDao.findAllStations();
+    }
 }

@@ -51,6 +51,18 @@ public class StationDaoDB  implements StationDao{
 
     }
 
+    public List<Station> findAllStations() {
+        String query = "SELECT * FROM Station";
+        return jdbcTemplate.query(query, (rs, rowNum) ->
+                new Station(
+                        rs.getInt("stationId"),
+                        rs.getString("stationName"),
+                        rs.getInt("stationCapacity"),
+                        rs.getInt("stationAvailableBikes")
+                )
+        );
+    }
+
     public static final class StationMapper implements RowMapper<Station> {
 
         @Override

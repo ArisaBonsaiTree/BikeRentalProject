@@ -9,6 +9,14 @@ public class Station {
     public Station() {
     }
 
+
+    public Station(int stationId, String stationName, int stationCapacity, int stationAvailableBikes) {
+        this.stationId = stationId;
+        this.stationName = stationName;
+        this.stationCapacity = stationCapacity;
+        this.stationAvailableBikes = stationAvailableBikes;
+    }
+
     public int getStationId() {
         return stationId;
     }

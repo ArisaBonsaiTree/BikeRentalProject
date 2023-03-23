@@ -24,6 +24,18 @@ public class Reservation {
         this.bikeId = bikeId;
     }
 
+    public Reservation(int reservationId, LocalDateTime startTime, LocalDateTime endTime, int startStationId, Integer endStationId, BigDecimal price, String customerName, int bikeId) {
+        this.reservationId = reservationId;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.startStationId = startStationId;
+        this.endStationId = endStationId;
+        this.price = price;
+        this.customerName = customerName;
+        this.bikeId = bikeId;
+    }
+
+
     public int getReservationId() {
         return reservationId;
     }
