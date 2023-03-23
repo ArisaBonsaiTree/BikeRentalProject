@@ -92,4 +92,16 @@ public class Controller {
         return serviceLayer.getBikeTypeById(id);
     }
 
+    // localhost:8080/stations
+    @GetMapping("/stations")
+    public List<Station> getAllStations() {
+        return serviceLayer.findAllStations();
+    }
+
+    // localhost:8080/reservation/2
+    @GetMapping("/reservation/{reservationId}")
+    public Reservation getReservationById(@PathVariable int reservationId) {
+        return serviceLayer.findReservationById(reservationId);
+    }
+
 }

@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import themavericks.MaverickRentals.entity.Reservation;
+import themavericks.MaverickRentals.entity.Station;
 import themavericks.MaverickRentals.exception.CustomException;
 
 import java.math.BigDecimal;
@@ -61,6 +62,33 @@ public class ReservationDaoDB implements ReservationDao{
         return jdbcTemplate.query(sql, new ReservationRowMapper());
     }
 
+    public List<Station> findAllStations() {
+        String query = "SELECT * FROM Station";
+        return jdbcTemplate.query(query, (rs, rowNum) ->
+                new Station(
+                        rs.getInt("stationId"),
+                        rs.getString("stationName"),
+                        rs.getInt("stationCapacity"),
+                        rs.getInt("stationAvailableBikes")
+                )
+        );
+    }
+
+    private static class getAllReservationRowMapper implements RowMapper<Reservation>{
+        @Override
+        public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Reservation reservation = new Reservation();
+                    rs.getInt("resevationId");
+                    rs.getTimestamp("startTime").toLocalDateTime();
+                    rs.getTimestamp("endTime");
+                    rs.getInt("startStationId");
+                    rs.getObject("endStationId");
+                    rs.getBigDecimal("price");
+                    rs.getString("customerName");
+                    rs.getInt("bikeId");
+                    return reservation;
+        }
+    }
     private static class ReservationRowMapper implements RowMapper<Reservation> {
         @Override
         public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
