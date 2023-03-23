@@ -4,7 +4,7 @@ public class Bike {
     private int bikeId;
     private int bikeTypeId;
     private boolean available;
-    private Integer stationId;
+    private int stationId;
 
     private BikeType bikeType;
 
@@ -43,11 +43,11 @@ public class Bike {
         this.available = available;
     }
 
-    public Integer getStationId() {
+    public int getStationId() {
         return stationId;
     }
 
-    public void setStationId(Integer stationId) {
+    public void setStationId(int stationId) {
         this.stationId = stationId;
     }
 }
