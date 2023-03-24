@@ -14,6 +14,9 @@ function Navbar() {
         <li>
           <Link to="/edit-reservation">Edit Reservation</Link>
         </li>
+        <li>
+          <Link to="/view-reservation">View Reservation</Link>
+        </li>
       </ul>
     </nav>
   );

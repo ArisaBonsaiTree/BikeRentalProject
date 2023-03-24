@@ -18,4 +18,15 @@ export const getBikesByStation = async (stationId) => {
     } catch (error) {
       console.error(error);
     }
-  };
+};
+
+export const getReservationById = async (reservationId) => {
+  try {
+    const response = await axios.get(`${baseUrl}/reservation/${reservationId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching reservation by id:', error);
+    return null;
+  }
+};
+
