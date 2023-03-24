@@ -1,12 +1,13 @@
-// ReservationDetails.jsx
-import React, { useState, useEffect1} from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getReservationById } from './api/apiCalls';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function ReservationDetails() {
   const [reservationId, setReservationId] = useState('');
   const [reservation, setReservation] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,37 +24,46 @@ function ReservationDetails() {
     }
   };
 
-  
-  const navigate = useNavigate();
-
   const handleCheckIn = () => {
     navigate('/checkin', { state: { reservation } });
   };
 
   return (
-    <div>
-      <h1>Reservation Details</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="reservationId">Reservation ID:</label>
-        <input
-          type="number"
-          id="reservationId"
-          value={reservationId}
-          onChange={(e) => setReservationId(e.target.value)}
-        />
-        <button type="submit">Search</button>
+    <div className="container">
+      <h1 className="text-center mt-3">Reservation Details</h1>
+      <form className="form-inline justify-content-center mt-3" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="reservationId" className="mr-3">
+            Reservation ID:
+          </label>
+          <input
+            type="number"
+            id="reservationId"
+            className="form-control mr-3"
+            value={reservationId}
+            onChange={(e) => setReservationId(e.target.value)}
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">
+          Search
+        </button>
       </form>
-      {errorMessage && <p>{errorMessage}</p>}
+      {errorMessage && <p className="text-danger mt-3">{errorMessage}</p>}
       {reservation && (
-        <div>
-          <p>Start Time: {reservation.startTime}</p>
-          <p>End Time: {reservation.endTime}</p>
-          <p>Start Station ID: {reservation.startStationId}</p>
-          <p>End Station ID: {reservation.endStationId}</p>
-          <p>Price: ${reservation.price.toFixed(2)}</p>
-          <p>Customer Name: {reservation.customerName}</p>
-          <p>Bike ID: {reservation.bikeId}</p>
-          <button onClick={handleCheckIn}>Check In</button>
+        <div className="card mt-3">
+          <div className="card-body">
+            <h5 className="card-title">Reservation Information</h5>
+            <p className="card-text">Start Time: {reservation.startTime}</p>
+            <p className="card-text">End Time: {reservation.endTime}</p>
+            <p className="card-text">Start Station ID: {reservation.startStationId}</p>
+            <p className="card-text">End Station ID: {reservation.endStationId}</p>
+            <p className="card-text">Price: ${reservation.price.toFixed(2)}</p>
+            <p className="card-text">Customer Name: {reservation.customerName}</p>
+            <p className="card-text">Bike ID: {reservation.bikeId}</p>
+            <button className="btn btn-primary mt-3" onClick={handleCheckIn}>
+              Check In
+            </button>
+          </div>
         </div>
       )}
     </div>

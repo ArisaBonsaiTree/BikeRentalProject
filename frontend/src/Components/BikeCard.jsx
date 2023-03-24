@@ -1,13 +1,21 @@
 import React from 'react';
+import { Card, Button } from 'react-bootstrap';
 
 function BikeCard({ bike, handleBikeSelection }) {
   return (
-    <div>
-      <p>Bike ID: {bike.bikeId}</p>
-      <p>Bike Type: {bike.bikeType?.typeName}</p>
-      <p>Bike Price: ${bike.bikeType?.bikePrice.toFixed(2)}</p>
-      <button onClick={() => handleBikeSelection(bike.bikeId)}>Select</button>
-    </div>
+    <Card>
+      <Card.Body>
+        <Card.Title>Bike ID: {bike.bikeId}</Card.Title>
+        <Card.Text>
+          Bike Type: {bike.bikeType?.typeName}
+          <br />
+          Bike Price: ${bike.bikeType?.bikePrice.toFixed(2)}
+        </Card.Text>
+        <Button variant="primary" onClick={() => handleBikeSelection(bike.bikeId)}>
+          Select
+        </Button>
+      </Card.Body>
+    </Card>
   );
 }
 

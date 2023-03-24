@@ -1,4 +1,3 @@
-// EditReservation.jsx
 import React, {useState, useEffect} from 'react';
 import {getAllStations, getBikesByStation} from './api/apiCalls'
 
@@ -52,14 +51,23 @@ function EditReservation() {
   };
 
   return (
-    <div>
-      <h1>Bike id: {selectedBikeId}</h1>
-      <SearchBar searchTerm={searchTerm} handleInputChange={handleInputChange} />
-      <StationSelect stations={filteredStations} handleStationSelect={handleStationSelect} />
-      <BikeList bikes={bikes} handleBikeSelection={handleBikeSelection} />
+    <div className="container my-5">
+      <h1 className="mb-5">Bike id: {selectedBikeId}</h1>
+      <div className="row">
+        <div className="col-md-6 mb-3">
+          <SearchBar searchTerm={searchTerm} handleInputChange={handleInputChange} />
+        </div>
+        <div className="col-md-6 mb-3">
+          <StationSelect stations={filteredStations} handleStationSelect={handleStationSelect} />
+        </div>
+      </div>
+      <div className="row">
+        <div className="col">
+          <BikeList bikes={bikes} handleBikeSelection={handleBikeSelection} />
+        </div>
+      </div>
     </div>
   );
 }
-
 
 export default EditReservation;
