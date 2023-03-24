@@ -2,24 +2,14 @@
 import React, {useState, useEffect} from 'react';
 import {getAllStations, getBikesByStation} from './api/apiCalls'
 
+
 function EditReservation() {
 
   const [stations, setStations] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const[selectedStationId, setSelectedStationId] = useState("")
-  const[bikes, setBikes] = useState([
-    {
-      bikeId: 1,
-      bikeTypeId: 2,
-      available: true,
-      stationId: 17,
-      bikeType: {
-        bikeTypeId: 2,
-        typeName: "Electric",
-        bikePrice: 7.00
-      }
-    }
-  ])
+  const[selectedBikeId, setSelectedBikeId] = useState("")
+  const[bikes, setBikes] = useState([])
 
   // Get all the stations when we load the page
   useEffect(() => {
@@ -53,15 +43,20 @@ function EditReservation() {
     setSelectedStationId(event.target.value)
   }
 
+  const handleBikeSelection = (bikeId) => {
+    console.log(`Selected bike with ID ${bikeId}`);
+    setSelectedBikeId(bikeId)
+  };
+
   return (
     <div>
+      <h1>Bike id: {selectedBikeId}</h1>
       <input
         type="text"
         placeholder="Search"
         value={searchTerm}
         onChange={handleInputChange}
       />
-
       <select onChange={handleStationSelect}>
         <option value="">Select a station</option>
         {filteredStations.map((station) => (
@@ -71,16 +66,17 @@ function EditReservation() {
         ))}
       </select>
 
-      <button
-        onClick={() => {
-          console.log("HELLO WORLD")
-          console.log(bikes);
-        }}
-        disabled={selectedStationId === ''}
-      >
-        Search Bikes
-      </button>
-    
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+        {bikes && bikes.length > 0 ? bikes.map((bike) => (
+          <div key={bike.bikeId}>
+            <p>Bike ID: {bike.bikeId}</p>
+            <p>Bike Type: {bike.bikeType?.typeName}</p>
+            <p>Bike Price: ${bike.bikeType?.bikePrice.toFixed(2)}</p>
+            <button onClick={() => handleBikeSelection(bike.bikeId)}>Select</button>
+          </div>
+          )) : 
+            <p>{bikes ? 'Loading...' : 'No bikes at this station'}</p>}
+          </div>
     </div>
   );
 }
