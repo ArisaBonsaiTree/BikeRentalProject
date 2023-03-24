@@ -1,5 +1,6 @@
 // ReservationDetails.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect1} from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getReservationById } from './api/apiCalls';
 
 function ReservationDetails() {
@@ -20,6 +21,13 @@ function ReservationDetails() {
         setErrorMessage('No reservation exists with that ID');
       }
     }
+  };
+
+  
+  const navigate = useNavigate();
+
+  const handleCheckIn = () => {
+    navigate('/checkin', { state: { reservation } });
   };
 
   return (
@@ -45,6 +53,7 @@ function ReservationDetails() {
           <p>Price: ${reservation.price.toFixed(2)}</p>
           <p>Customer Name: {reservation.customerName}</p>
           <p>Bike ID: {reservation.bikeId}</p>
+          <button onClick={handleCheckIn}>Check In</button>
         </div>
       )}
     </div>

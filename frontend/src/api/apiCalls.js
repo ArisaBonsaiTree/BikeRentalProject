@@ -30,3 +30,18 @@ export const getReservationById = async (reservationId) => {
   }
 };
 
+// localhost:8080/reservation/1?endTime=2023-04-23T14:00:00&endStationId=2&bikeId=1
+export async function updateReservation(reservationId, endTime, endStationId, bikeId) {
+  try {
+    const response = await axios.put(`${baseUrl}/reservation/${reservationId}`, null, {
+      params: {
+        endTime,
+        endStationId,
+        bikeId,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data);
+  }
+}

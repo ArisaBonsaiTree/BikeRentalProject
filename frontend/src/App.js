@@ -5,6 +5,8 @@ import CreateReservation from './components/CreateReservation'
 import EditReservation from './EditReservation';
 import Navbar from './Navbar';
 import ReservationDetails from './ReservationDetails';
+import CheckIn from './components/CheckIn';
+import Confirmation from './components/Confirmation';
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path="/create-reservation" element={<CreateReservation />} />
         <Route path="/edit-reservation" element={<EditReservation/>} />
         <Route path="/view-reservation" element={<ReservationDetails/>} />
+        <Route path="/checkin" element={<CheckIn/>} />
+        <Route path="/confirmation" element={<Confirmation/>} />
       </Routes>
     </Router>
   );
