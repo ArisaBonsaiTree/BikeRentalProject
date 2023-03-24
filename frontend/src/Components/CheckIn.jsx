@@ -1,15 +1,44 @@
-import React, { useState } from 'react';
+import React, {useState, useEffect} from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { updateReservation } from '../api/apiCalls';
+import StationSelect from './StationSelect';
+import {getAllStations, getBikesByStation} from '../api/apiCalls';
+import EndTimeInput from './EndTimeInput';
 
 function CheckIn() {
   const location = useLocation();
-  const reservation = location.state.reservation;
+  const reservation = location.state?.reservation; // Safetly access the reservation
   const navigate = useNavigate();
 
   const [endStationId, setEndStationId] = useState('');
   const [endTime, setEndTime] = useState('');
   const [message, setMessage] = useState(null);
+  const [stations, setStations] = useState([])
+
+  const handleStationSelect = (e) => {
+    setEndStationId(e.target.value)
+  }
+
+  const handleEndTimeChange = (event) => {
+    setEndTime(event.target.value);
+  };
+
+  useEffect(() => {
+    if (!reservation) {
+      // Redirect to another page if the reservation object is not available
+      // Replace '/home' with the desired path
+      navigate('/');
+    }
+  }, [navigate, reservation]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getAllStations();
+      setStations(data);
+    }
+    fetchData();
+  }, []);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,68 +63,55 @@ function CheckIn() {
   };
 
   return (
-    <div className="container mt-5">
-      <h1 className="mb-4">Check In</h1>
-      <div className="row">
-        <div className="col-sm-6">
-          <p>
-            <strong>Reservation Id:</strong> {reservation.reservationId}
-          </p>
-          <p>
-            <strong>Start Time:</strong> {reservation.startTime}
-          </p>
-          <p>
-            <strong>End Time:</strong> {reservation.endTime}
-          </p>
-          <p>
-            <strong>Start Station ID:</strong> {reservation.startStationId}
-          </p>
-          <p>
-            <strong>End Station ID:</strong> {reservation.endStationId}
-          </p>
-          <p>
-            <strong>Price:</strong> ${reservation.price.toFixed(2)}
-          </p>
-          <p>
-            <strong>Customer Name:</strong> {reservation.customerName}
-          </p>
-          <p>
-            <strong>Bike ID:</strong> {reservation.bikeId}
-          </p>
+    reservation && (
+      <div className="container mt-5">
+        <h1 className="mb-4">Check In</h1>
+        
+        <div className="row">
+          <div className="col-sm-6">
+            <p>
+              <strong>Reservation Id:</strong> {reservation.reservationId}
+            </p>
+            <p>
+              <strong>Start Time:</strong> {reservation.startTime}
+            </p>
+            <p>
+              <strong>End Time:</strong> {reservation.endTime}
+            </p>
+            <p>
+              <strong>Start Station ID:</strong> {reservation.startStationId}
+            </p>
+            <p>
+              <strong>End Station ID:</strong> {reservation.endStationId}
+            </p>
+            <p>
+              <strong>Price:</strong> ${reservation.price.toFixed(2)}
+            </p>
+            <p>
+              <strong>Customer Name:</strong> {reservation.customerName}
+            </p>
+            <p>
+              <strong>Bike ID:</strong> {reservation.bikeId}
+            </p>
+          </div>
+          <div className="col-sm-6">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="endStationId">End Station ID:</label>
+                  <StationSelect stations={stations}handleStationSelect={handleStationSelect}/>
+              </div>
+              <EndTimeInput endTime={endTime} handleEndTimeChange={handleEndTimeChange} />
+              <button type="submit" className="btn btn-primary">
+                Update Reservation  
+              </button>
+            </form>
+          </div>
+
         </div>
-        <div className="col-sm-6">
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="endStationId">End Station ID:</label>
-              <input
-                type="number"
-                className="form-control"
-                id="endStationId"
-                value={endStationId}
-                onChange={(e) => setEndStationId(e.target.value)}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="endTime">End Time:</label>
-              <input
-                type="datetime-local"
-                className="form-control"
-                id="endTime"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Update Reservation
-            </button>
-          </form>
-        </div>
+        {message && <p className="mt-3">{message}</p>}
       </div>
-      {message && <p className="mt-3">{message}</p>}
-    </div>
-  );
+    )
+  )
 }
 
-export default CheckIn;
+export default CheckIn

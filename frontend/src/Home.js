@@ -52,6 +52,11 @@ function Home() {
         <Link className="btn btn-primary btn-lg" to="/create-reservation" role="button">
           Book Now
         </Link>
+        <hr className="my-4" />
+        <p>Already have a reservation?</p>
+        <Link className="btn btn-secondary btn-lg" to="/view-reservation" role="button">
+          Check In
+        </Link>
       </div>
     </div>
   );

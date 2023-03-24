@@ -1,10 +1,11 @@
 import React from 'react';
+import { Form } from 'react-bootstrap';
 
 function SearchBar({ searchTerm, handleInputChange }) {
   return (
-    <input
+    <Form.Control
       type="text"
-      placeholder="Search"
+      placeholder="Type in the station name"
       value={searchTerm}
       onChange={handleInputChange}
     />

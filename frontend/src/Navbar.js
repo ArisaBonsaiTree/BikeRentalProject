@@ -38,8 +38,8 @@ function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/view-reservation">
-                View Reservation
+              <Link className="nav-link" to="/outdated-reservation">
+                Reference
               </Link>
             </li>
           </ul>

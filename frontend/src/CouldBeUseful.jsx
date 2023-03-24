@@ -5,7 +5,7 @@ import SearchBar from './components/SearchBar';
 import StationSelect from './components/StationSelect';
 import BikeList from './components/BikeList';
 
-function EditReservation() {
+function CouldBeUseful() {
 
   const [stations, setStations] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -70,4 +70,4 @@ function EditReservation() {
   );
 }
 
-export default EditReservation;
+export default CouldBeUseful;

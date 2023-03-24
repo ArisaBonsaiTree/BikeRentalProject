@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getReservationById } from './api/apiCalls';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function ReservationDetails() {
+function EditReservationStart() {
   const [reservationId, setReservationId] = useState('');
   const [reservation, setReservation] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
@@ -36,13 +36,16 @@ function ReservationDetails() {
           <label htmlFor="reservationId" className="mr-3">
             Reservation ID:
           </label>
+          
           <input
             type="number"
             id="reservationId"
             className="form-control mr-3"
             value={reservationId}
             onChange={(e) => setReservationId(e.target.value)}
+            style={{ appearance: 'none' }}
           />
+
         </div>
         <button type="submit" className="btn btn-primary">
           Search
@@ -70,4 +73,4 @@ function ReservationDetails() {
   );
 }
 
-export default ReservationDetails;
+export default EditReservationStart;
