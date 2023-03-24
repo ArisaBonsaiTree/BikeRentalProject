@@ -63,16 +63,16 @@ function CreateReservation(props) {
     function getStepContent(step) {
         switch (step) {
             case 0:
-                return <CheckIn reservation={reservation} selectedBikePrice={50.00} />;
+                return <CheckOut reservation={reservation} selectedBikePrice={50.00} />;
             case 1:
-                return <CheckIn reservation={reservation} selectedBikePrice={50.00} />;
+                return <CheckOut reservation={reservation} selectedBikePrice={50.00} />;
             default:
                 throw new Error('Unknown step');
         }
     }
 
     return (
-        <><CarouselComponent bikes={bikes} bikeMapping={bikeMapping} onSelectBike={onSelectBike} /><Reservation steps={checkinSteps} getStepContent={getStepContent} /></>
+        <><CarouselComponent bikes={bikes} bikeMapping={bikeMapping} onSelectBike={onSelectBike} /><Reservation steps={checkoutSteps} getStepContent={getStepContent} /></>
             
     )
 }

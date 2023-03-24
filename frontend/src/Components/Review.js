@@ -11,7 +11,7 @@ const ReservationListItem = styled(ListItem)(({ theme }) => ({
         padding: theme.spacing(2),
     }));
 
-export function CheckIn( { reservation, selectedBikePrice }) {
+export function CheckOut( { reservation, selectedBikePrice }) {
     return (
             <React.Fragment>
                 <ReservationListItem>
@@ -43,7 +43,7 @@ export function CheckIn( { reservation, selectedBikePrice }) {
 }
 
 
-export function CheckOut( { reservation }) {
+export function CheckIn( { reservation }) {
     return (
             <React.Fragment>
                 <ReservationListItem>
