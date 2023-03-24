@@ -75,7 +75,7 @@ function EditReservation() {
             <button onClick={() => handleBikeSelection(bike.bikeId)}>Select</button>
           </div>
           )) : 
-            <p>{bikes ? 'Loading...' : 'No bikes at this station'}</p>}
+            <p>{bikes ? '' : 'No bikes at this station'}</p>}
           </div>
     </div>
   );
