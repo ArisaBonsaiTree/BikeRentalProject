@@ -2,6 +2,9 @@
 import React, {useState, useEffect} from 'react';
 import {getAllStations, getBikesByStation} from './api/apiCalls'
 
+import SearchBar from './components/SearchBar';
+import StationSelect from './components/StationSelect';
+import BikeList from './components/BikeList';
 
 function EditReservation() {
 
@@ -51,32 +54,9 @@ function EditReservation() {
   return (
     <div>
       <h1>Bike id: {selectedBikeId}</h1>
-      <input
-        type="text"
-        placeholder="Search"
-        value={searchTerm}
-        onChange={handleInputChange}
-      />
-      <select onChange={handleStationSelect}>
-        <option value="">Select a station</option>
-        {filteredStations.map((station) => (
-          <option key={station.stationId} value={station.stationId}>
-            Station id: {station.stationId} Station Name: {station.stationName}
-          </option>
-        ))}
-      </select>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-        {bikes && bikes.length > 0 ? bikes.map((bike) => (
-          <div key={bike.bikeId}>
-            <p>Bike ID: {bike.bikeId}</p>
-            <p>Bike Type: {bike.bikeType?.typeName}</p>
-            <p>Bike Price: ${bike.bikeType?.bikePrice.toFixed(2)}</p>
-            <button onClick={() => handleBikeSelection(bike.bikeId)}>Select</button>
-          </div>
-          )) : 
-            <p>{bikes ? '' : 'No bikes at this station'}</p>}
-          </div>
+      <SearchBar searchTerm={searchTerm} handleInputChange={handleInputChange} />
+      <StationSelect stations={filteredStations} handleStationSelect={handleStationSelect} />
+      <BikeList bikes={bikes} handleBikeSelection={handleBikeSelection} />
     </div>
   );
 }
