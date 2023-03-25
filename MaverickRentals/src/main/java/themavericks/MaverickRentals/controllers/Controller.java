@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:8080" })
 public class Controller {
     @Autowired
     ServiceLayer serviceLayer;
@@ -63,9 +64,22 @@ public class Controller {
             return ResponseEntity.ok(reservations);
         }
     }
-
+    // SENT
+    // http://localhost:8080/createReservation?numOfHours=2&startStationId=17&customerName=John&bikeId=1
+    // RECEIVED
+//    {
+//        "reservationId": 529,
+//            "startTime": "2023-03-24T14:39:39.2018547",
+//            "endTime": null,
+//            "startStationId": 17,
+//            "endStationId": null,
+//            "price": 0.0,
+//            "customerName": "John",
+//            "bikeId": 1
+//    }
     @PostMapping("/createReservation")
     public ResponseEntity<Reservation> createReservation(@RequestParam long numOfHours, int startStationId, String customerName, int bikeId) throws CustomException{
+        System.out.println(numOfHours);
         Reservation reservation = serviceLayer.addReservation(numOfHours, startStationId, customerName, bikeId);
         return new ResponseEntity(reservation, HttpStatus.CREATED);
     }
