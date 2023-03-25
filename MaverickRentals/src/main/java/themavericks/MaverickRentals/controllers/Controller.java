@@ -33,6 +33,10 @@ public class Controller {
 
     @GetMapping("bikes/{stationId}")
     public ResponseEntity<List<Bike>> bikesByStationId(@PathVariable("stationId") int stationId){
+        if (stationId <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
         List<Bike> bikes = serviceLayer.getAllBikesAtStation(stationId);
 
         if(bikes.isEmpty()){
@@ -45,6 +49,9 @@ public class Controller {
 
     @GetMapping("station/{stationId}")
     public ResponseEntity<List<Station>> findByStationId(@PathVariable int stationId) {
+        if (stationId <= 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         List<Station> stations = serviceLayer.getStationById(stationId);
         if(stations.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -80,8 +87,26 @@ public class Controller {
     @PostMapping("/createReservation")
     public ResponseEntity<Reservation> createReservation(@RequestParam long numOfHours, int startStationId, String customerName, int bikeId) throws CustomException{
         System.out.println(numOfHours);
-        Reservation reservation = serviceLayer.addReservation(numOfHours, startStationId, customerName, bikeId);
-        return new ResponseEntity(reservation, HttpStatus.CREATED);
+        List<Station> searchStations = serviceLayer.findAllStations();
+        List<Bike> searchBike = serviceLayer.getAllBikes();
+        boolean isStationThere = false;
+        boolean isBikeThere = false;
+        for(int i = 0; i < searchStations.size(); i++) {
+            if(searchStations.get(i).getStationId() == startStationId) {
+                isStationThere = true;
+            }
+        }
+        for(int i = 0; i < searchBike.size(); i++) {
+            if(searchBike.get(i).getBikeId() == bikeId) {
+                isBikeThere = true;
+            }
+        }
+        if(isStationThere && isBikeThere && numOfHours >= 1){
+            Reservation reservation = serviceLayer.addReservation(numOfHours, startStationId, customerName, bikeId);
+            return new ResponseEntity(reservation, HttpStatus.CREATED);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     // PUT http://localhost:8080/reservation/{reservationId}?endTime={endTime}&endStationId={endStationId}&bikeId={bikeId}
@@ -89,8 +114,33 @@ public class Controller {
     @PutMapping("/reservation/{reservationId}")
     public ResponseEntity updateReservation(@PathVariable int reservationId, @RequestParam LocalDateTime endTime, @RequestParam int endStationId, @RequestParam int bikeId) {
         try {
-            serviceLayer.updateReservationAndBike(reservationId, endTime, endStationId, bikeId);
-            return ResponseEntity.ok("Reservation updated");
+            List<Reservation> searchReservations = serviceLayer.getAllReservations();
+            List<Station> searchStations = serviceLayer.findAllStations();
+            List<Bike> searchBike = serviceLayer.getAllBikes();
+            boolean isReservationThere = false;
+            boolean isStationThere = false;
+            boolean isBikeThere = false;
+            for(int i = 0; i < searchReservations.size(); i++) {
+                if(searchReservations.get(i).getReservationId() == reservationId) {
+                    isReservationThere = true;
+                }
+            }
+            for(int i = 0; i < searchStations.size(); i++) {
+                if(searchStations.get(i).getStationId() == endStationId) {
+                    isStationThere = true;
+                }
+            }
+            for(int i = 0; i < searchBike.size(); i++) {
+                if(searchBike.get(i).getBikeId() == bikeId) {
+                    isBikeThere = true;
+                }
+            }
+            if(isReservationThere && isStationThere && isBikeThere) {
+                serviceLayer.updateReservationAndBike(reservationId, endTime, endStationId, bikeId);
+                return ResponseEntity.ok("Reservation updated");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

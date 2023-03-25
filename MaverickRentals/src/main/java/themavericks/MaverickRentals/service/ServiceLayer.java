@@ -16,6 +16,7 @@ import themavericks.MaverickRentals.exception.CustomException;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -52,16 +53,8 @@ public class ServiceLayer {
     }
 
     public Reservation addReservation(long numOfHours, int startStationId, String customerName, int bikeId) throws CustomException {
-        LocalDateTime startTime = LocalDateTime.now();
-        LocalDateTime endTime = startTime.plusHours(numOfHours);
+        LocalDateTime startTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         Reservation reservation = new Reservation(startTime, startStationId, bikeId);
-        //reservation.setStartTime(startTime);
-
-//        System.out.println(reservation.getStartTime());
-//        System.out.println(reservation.getEndTime());
-//        BigDecimal pricePerHour = bikeDao.getPricePerHour(bikeId);
-//        BigDecimal durationHours = BigDecimal.valueOf(Duration.between(reservation.getStartTime(), endTime).toHours());
-//        BigDecimal totalPrice = durationHours.multiply(pricePerHour);
         reservation.setCustomerName(customerName);
         reservation.setPrice(BigDecimal.valueOf(0.00));
         bikeDao.updateBikeAvailability(bikeId, false);
