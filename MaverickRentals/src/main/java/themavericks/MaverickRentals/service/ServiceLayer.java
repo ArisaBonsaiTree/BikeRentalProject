@@ -57,9 +57,9 @@ public class ServiceLayer {
         Reservation reservation = new Reservation(startTime, startStationId, bikeId);
         reservation.setCustomerName(customerName);
         reservation.setPrice(BigDecimal.valueOf(0.00));
+
         bikeDao.updateBikeAvailability(bikeId, false);
         stationDao.updateStation(startStationId, true);
-
 
         return reservationDao.addReservation(reservation);
     }

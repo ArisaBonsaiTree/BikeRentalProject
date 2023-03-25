@@ -27,9 +27,7 @@ public class ReservationDaoDB implements ReservationDao{
         jdbcTemplate.update((Connection conn) -> {
             PreparedStatement preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setTimestamp(1, Timestamp.valueOf(reservation.getStartTime()));
-            //preparedStatement.setTimestamp(2, Timestamp.valueOf(reservation.getEndTime()));
             preparedStatement.setInt(2, reservation.getStartStationId());
-            //preparedStatement.setInt(4, reservation.getEndStationId());
             preparedStatement.setBigDecimal(3, reservation.getPrice());
             preparedStatement.setString(4, reservation.getCustomerName());
             preparedStatement.setInt(5, reservation.getBikeId());

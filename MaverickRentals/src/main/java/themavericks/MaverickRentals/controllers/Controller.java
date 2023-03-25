@@ -33,10 +33,6 @@ public class Controller {
 
     @GetMapping("bikes/{stationId}")
     public ResponseEntity<List<Bike>> bikesByStationId(@PathVariable("stationId") int stationId){
-        if (stationId <= 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
-
         List<Bike> bikes = serviceLayer.getAllBikesAtStation(stationId);
 
         if(bikes.isEmpty()){
@@ -49,9 +45,6 @@ public class Controller {
 
     @GetMapping("station/{stationId}")
     public ResponseEntity<List<Station>> findByStationId(@PathVariable int stationId) {
-        if (stationId <= 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
         List<Station> stations = serviceLayer.getStationById(stationId);
         if(stations.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
