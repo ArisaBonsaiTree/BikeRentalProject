@@ -16,12 +16,12 @@ export function ReservationForm(props) {
     };
 
 
-    const [currentTime, setCurrentTime] = useState(new Date());
+//   const [currentTime, setCurrentTime] = useState(new Date());
 
     useEffect(() => {
         const interval = setInterval(() => {
             const now = new Date();
-            setCurrentTime(now);
+//            setCurrentTime(now);
             props.onStartTimeChange(now);
         }, 1000);
 

@@ -1,17 +1,20 @@
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
-import { styled } from '@mui/system';
-import { Card, CardMedia, CardContent, Typography, Select, Button } from '@mui/material';
+import { Card, CardMedia, CardContent, Typography, Button } from '@mui/material';
 
 
 export function CarouselComponent(props) {
     return (
         <Carousel>
             {
-                props.bikes ? props.bikes.map((bike) => (
+                props.bikes && props.bikes.length > 0 ? (
+                    props.bikes.map((bike) => (
                     <BikeSlide key={bike.bikeId} bike={bike} bikeImages={props.bikeImages} onClick={props.onClick} />
-                )) : null
-            }
+                    ))
+                ) : (
+            <p>{props.bikes ? '' : 'No bikes at this station'}</p>
+            )}
+        
         </Carousel>
     )
 };
@@ -19,7 +22,6 @@ export function CarouselComponent(props) {
 export function BikeSlide(props) {
     const { bike, bikeImages, onClick } = props;
     const id = bike.bikeId;
-    const name = bike.bikeId;
     const bikeType = bike.bikeType;
 
     const type = bikeType.typeName;

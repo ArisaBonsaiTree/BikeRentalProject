@@ -45,7 +45,6 @@ export default function Reservation({ steps, getStepContent, onSubmit }) {
         setActiveStep(activeStep + 1);
     };
 
-
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -63,27 +62,26 @@ export default function Reservation({ steps, getStepContent, onSubmit }) {
                     </Stepper>
                     {activeStep === steps.length ? (
                         <React.Fragment>
-                            <Typography variant="h5" gutterBottom>
-                                Thank you for confirming!
-                            </Typography>
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            {getStepContent(activeStep)}
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                {activeStep !== 0 && (
-                                    <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                                        Back
-                                    </Button>
-                                )}
-                                <Button
-                                    variant="contained"
-                                        onClick={activeStep === steps.length - 1 ? handleConfirm : handleNext}
-                                    sx={{ mt: 3, ml: 1 }}
-                                >
-                                    {activeStep === steps.length - 1 ? 'Confirm' : 'Next'}
-                                </Button>
-                            </Box>
+                                {getStepContent(activeStep)}
+                                {activeStep < steps.length - 1 &&
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                        {activeStep === 1 && (
+                                            <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+                                                Back
+                                            </Button>
+                                        )}
+                                        <Button
+                                            variant="contained"
+                                            onClick={activeStep === steps.length - 2 ? handleConfirm : handleNext}
+                                            sx={{ mt: 3, ml: 1 }}
+                                        >
+                                            {activeStep === steps.length - 2 ? 'Confirm' : 'Next'}
+                                        </Button>
+                                    </Box>
+                                }
                         </React.Fragment>
                     )}
                 </Paper>
