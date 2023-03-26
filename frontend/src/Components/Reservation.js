@@ -29,7 +29,7 @@ function Copyright() {
 const theme = createTheme();
 
 
-export default function Reservation({ steps, getStepContent}) {
+export default function Reservation({ steps, getStepContent, onSubmit }) {
     const [activeStep, setActiveStep] = React.useState(0);
 
     const handleNext = () => {
@@ -38,6 +38,11 @@ export default function Reservation({ steps, getStepContent}) {
 
     const handleBack = () => {
         setActiveStep(activeStep - 1);
+    };
+
+    const handleConfirm = () => {
+        onSubmit();
+        setActiveStep(activeStep + 1);
     };
 
 
@@ -73,7 +78,7 @@ export default function Reservation({ steps, getStepContent}) {
                                 )}
                                 <Button
                                     variant="contained"
-                                    onClick={handleNext}
+                                        onClick={activeStep === steps.length - 1 ? handleConfirm : handleNext}
                                     sx={{ mt: 3, ml: 1 }}
                                 >
                                     {activeStep === steps.length - 1 ? 'Confirm' : 'Next'}

@@ -1,38 +1,36 @@
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
+import { Card, CardContent, Typography, CardMedia } from '@mui/material';
 
 
-
-function CarouselComponent(props) {
-
-
-    const handleSelectBike = (bike) => {
-        const { image, price } = props.bikeMapping[bike.type];
-        props.onSelectBike(bike.bikeId, price);
-    };
-
+export function CarouselComponent(props) {
     return (
         <Carousel>
             {
-                props.bikes.map((bike, index) => (
-                    <BikeSlide key={bike.id} bike={bike} bikeMapping={props.bikeMapping} onClick={() => handleSelectBike(bike)} />
-                ))
+                props.bikes ? props.bikes.map((bike) => (
+                    <BikeSlide key={bike.bikeId} bike={bike} bikeImages={props.bikeImages} onClick={props.onClick} />
+                )) : null
             }
         </Carousel>
     )
 };
 
-function BikeSlide(props) {
-   
-    const { image, price } = props.bikeMapping[props.bike.type];
 
+export function BikeSlide(props) {
     return (
-        <div onClick={props.onClick}>
-            <img src={image} alt={props.bike.type} />
-            <h2>{props.bike.type}</h2>
-            <p>Price: ${price}</p>
-        </div>
+        <Card onClick={() => props.onClick(props.bike.bikeId, props.bike.bikeType.bikePrice)}>
+            <CardMedia
+                component="img"
+                height="200"
+                width="100"
+                image={props.bikeImages[props.bike.bikeType.typeName].image}
+                alt={props.bike.bikeType.typeName}
+            />
+            <CardContent>
+                <Typography variant="h6">Bike ID: {props.bike.bikeId}</Typography>
+                <Typography variant="h6">{props.bike.bikeType.typeName}</Typography>
+                <Typography variant="body1">Price: ${props.bike.bikeType.bikePrice}</Typography>
+            </CardContent>
+        </Card>
     );
 };
-
-export default CarouselComponent;

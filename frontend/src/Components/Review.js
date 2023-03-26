@@ -11,30 +11,26 @@ const ReservationListItem = styled(ListItem)(({ theme }) => ({
         padding: theme.spacing(2),
     }));
 
-export function CheckOut( { reservation, selectedBikePrice }) {
+export function CheckOut( { customerName, startTime, startStation, pricePerHour }) {
     return (
             <React.Fragment>
                 <ReservationListItem>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                            <Typography variant="subtitle1">Reservation ID</Typography>
-                            <Typography variant="body1">{reservation.reservationId}</Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
                             <Typography variant="subtitle1">Name</Typography>
-                            <Typography variant="body1">{reservation.fullName}</Typography>
+                            <Typography variant="body1">{customerName}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Typography variant="subtitle1">Start Time</Typography>
-                            <Typography variant="body1">{reservation.startTime}</Typography>
+                            <Typography variant="body1">{startTime}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <Typography variant="subtitle1">Start Station</Typography>
-                            <Typography variant="body1">{reservation.startStation}</Typography>
+                            <Typography variant="body1">{startStation}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="subtitle1">Price Per Hour</Typography>
-                            <Typography variant="body1">{`$${selectedBikePrice}`}</Typography>
+                            <Typography variant="body1">{`$${pricePerHour}`}</Typography>
                         </Grid>
                     </Grid>
                 </ReservationListItem>
