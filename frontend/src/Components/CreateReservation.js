@@ -5,13 +5,15 @@ import Reservation from './Reservation';
 import { ReservationForm } from './Input';
 import Typography from '@mui/material/Typography';
 import { createReservation, getBikesByStation } from '../api/apiCalls';
-
-
-const API_BASE_URL = 'http://localhost:8080';
+import { useLocation } from 'react-router-dom';
 
 
 // stationId will be passed in as a props
-function CreateReservation(props) {
+function CreateReservation() {
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const stationId = searchParams.get('stationId');
+
     const [bikes, setBikes] = useState(null);
     const [loading, setLoading] = useState(true);
     const [selectedBikeId, setSelectedBikeId] = useState(null);
@@ -19,27 +21,28 @@ function CreateReservation(props) {
     const [customerName, setCustomerName] = useState('');
     const [numOfHours, setNumOfHours] = useState('');
     const [startTime, setStartTime] = useState(new Date());
-    const [returnedResponse, setReturnedReponse] = useState(null);
-    const stationId = 17;
+    const [reservationId, setReservationId] = useState(null);
 
     const handleCustomerNameChange = (newCustomerName) => {
-        console.log(newCustomerName);
         setCustomerName(newCustomerName);
     };
 
     const handleNumOfHoursChange = (newNumofHours) => {
-        console.log(newNumofHours);
         setNumOfHours(newNumofHours);
     };
 
     const handleStartTime = (startTime) => {
-        console.log(startTime);
         setStartTime(startTime.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }));
     };
 
-    function handleSubmit() {
-        const reservation = createReservation(numOfHours, stationId, customerName, selectedBikeId);
-        setReturnedReponse(reservation)
+    const onSelectBike = (bikeId, bikePrice) => {
+        setSelectedBikeId(bikeId);
+        setSelectedBikePrice(bikePrice);
+    };
+
+    async function handleSubmit() {
+        const reservation = await createReservation(numOfHours, stationId, customerName, selectedBikeId);
+        setReservationId(reservation.reservationId);
     }
 
 
@@ -50,7 +53,7 @@ function CreateReservation(props) {
         'Electric': {
             image: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/613TloL9e3L._AC_SL1500_.jpg',
         },
-        'Tandom': {
+        'Tandem': {
             image: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/81Fi6V7wciL._AC_SL1500_.jpg',
         },
         'Mountain': {
@@ -78,32 +81,18 @@ function CreateReservation(props) {
         return <div>Loading...</div>;
     }
 
-    const onSelectBike = (bikeId, bikePrice) => {
-        setSelectedBikeId(bikeId);
-        setSelectedBikePrice(bikePrice);
-    };
 
-    const reservation = {
-        reservationId: "1234",
-        fullName: "John Doe",
-        startTime: "2023-04-01T10:00:00",
-        startStation: "Station A",
-        numOfHours: 8,
-        pricePerHour: 50.00,
-    };
-
-    const checkoutSteps = ['Check Out', 'Review'];
-
-    function SendData(sendData) {
+    function Confirmation(reservationId) {
         return (
             <React.Fragment>
                 <Typography variant="h5" gutterBottom>
-                    Thank you for confirming!
+                    Thank you for confirming! Your reservationId is {reservationId}.
                 </Typography>
             </React.Fragment>
         )
     }
 
+    const checkoutSteps = ['Check Out', 'Review','Confirmation'];
 
     function getStepContent(step) {
         switch (step) {
@@ -115,7 +104,9 @@ function CreateReservation(props) {
                 />;
             case 1:
                 return <CheckOut customerName={customerName} startTime={startTime}
-                    startStation={stationId} pricePerHour={selectedBikePrice}/>
+                    startStation={stationId} pricePerHour={selectedBikePrice} />
+            case 2:
+                return Confirmation(reservationId);
 
             throw new Error('Unknown step');
         }
