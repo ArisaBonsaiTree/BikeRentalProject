@@ -1,30 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { CarouselComponent, BikeSlide } from './CarouselComponent';
-import { CheckIn, CheckOut } from './Review';
+import { CarouselComponent } from './CarouselComponent';
+import { CheckOut } from './Review';
 import Reservation from './Reservation';
 import { ReservationForm } from './Input';
 import Typography from '@mui/material/Typography';
+import { createReservation, getBikesByStation } from '../api/apiCalls';
 
-import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:8080';
-
-function getBikesByStationId(stationId) {
-    return axios.get(`${API_BASE_URL}/bikes/${stationId}`);
-}
-
-function createReservation(numOfHours, startStationId, customerName, bikeId) {
-    const url = `${API_BASE_URL}/createReservation`;
-
-    const payload = {
-        numOfHours: numOfHours,
-        startStationId: startStationId,
-        customerName: customerName,
-        bikeId: bikeId
-    };
-
-    return axios.post(url, payload);
-}
 
 
 // stationId will be passed in as a props
@@ -36,7 +19,8 @@ function CreateReservation(props) {
     const [customerName, setCustomerName] = useState('');
     const [numOfHours, setNumOfHours] = useState('');
     const [startTime, setStartTime] = useState(new Date());
-    const stationId = 11;
+    const [returnedResponse, setReturnedReponse] = useState(null);
+    const stationId = 17;
 
     const handleCustomerNameChange = (newCustomerName) => {
         console.log(newCustomerName);
@@ -54,41 +38,34 @@ function CreateReservation(props) {
     };
 
     function handleSubmit() {
-        createReservation(numOfHours, stationId, customerName, selectedBikeId)
-            .then(response => {
-                console.log(response.data);
-                // Handle successful response
-            })
-            .catch(error => {
-                console.log(error);
-                // Handle error response
-            });
+        const reservation = createReservation(numOfHours, stationId, customerName, selectedBikeId);
+        setReturnedReponse(reservation)
     }
 
 
     var bikeImages = {
         'Standard': {
-            image: 'https://picsum.photos/600/400?random=1',
+            image: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/81ozH1S0-WL._AC_SL1500_.jpg',
         },
         'Electric': {
-            image: 'https://picsum.photos/600/400?random=2',
+            image: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/613TloL9e3L._AC_SL1500_.jpg',
         },
         'Tandom': {
-            image: 'https://picsum.photos/600/400?random=3',
+            image: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/81Fi6V7wciL._AC_SL1500_.jpg',
         },
         'Mountain': {
-            image: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T2/images/I/71oPYVZs4kL._AC_SX679_.jpg',
+            image: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/91gEELfSWkL._AC_SX679_.jpg',
         },
         'City': {
-            image: 'https://picsum.photos/600/400?random=3',
+            image: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/71QTRS0M7BL._AC_SL1500_.jpg',
         },
     }
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await getBikesByStationId(stationId);
-                setBikes(response.data);
+                const response = await getBikesByStation(stationId);
+                setBikes(response);
                 setLoading(false);
             } catch (error) {
                 console.error(error);
@@ -145,12 +122,22 @@ function CreateReservation(props) {
     }
 
     return (
-        <>  
-        <CarouselComponent bikes={bikes} bikeImages={bikeImages} onClick={onSelectBike} />
-            <Reservation steps={checkoutSteps} getStepContent={getStepContent} onSubmit={handleSubmit} />
+        <>
+            {selectedBikeId ? (
+                <Reservation
+                    steps={checkoutSteps}
+                    getStepContent={getStepContent}
+                    onSubmit={handleSubmit}
+                />
+            ) : (
+                <CarouselComponent
+                    bikes={bikes}
+                    bikeImages={bikeImages}
+                    onClick={onSelectBike}
+                />
+            )}
         </>
-
-    )
+    );
 }
 
 

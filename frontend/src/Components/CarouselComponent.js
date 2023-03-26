@@ -1,6 +1,7 @@
 import React from 'react';
 import Carousel from 'react-material-ui-carousel';
-import { Card, CardContent, Typography, CardMedia } from '@mui/material';
+import { styled } from '@mui/system';
+import { Card, CardMedia, CardContent, Typography, Select, Button } from '@mui/material';
 
 
 export function CarouselComponent(props) {
@@ -15,22 +16,37 @@ export function CarouselComponent(props) {
     )
 };
 
-
 export function BikeSlide(props) {
+    const { bike, bikeImages, onClick } = props;
+    const id = bike.bikeId;
+    const name = bike.bikeId;
+    const bikeType = bike.bikeType;
+
+    const type = bikeType.typeName;
+
+    const image = bikeImages[type] ? bikeImages[type].image : null;
+
+
+    const handleSelect = () => {
+        console.log(id);
+        console.log(bikeType.bikePrice);
+        onClick(id, bikeType.bikePrice);
+    };
     return (
-        <Card onClick={() => props.onClick(props.bike.bikeId, props.bike.bikeType.bikePrice)}>
-            <CardMedia
-                component="img"
-                height="200"
-                width="100"
-                image={props.bikeImages[props.bike.bikeType.typeName].image}
-                alt={props.bike.bikeType.typeName}
-            />
-            <CardContent>
-                <Typography variant="h6">Bike ID: {props.bike.bikeId}</Typography>
-                <Typography variant="h6">{props.bike.bikeType.typeName}</Typography>
-                <Typography variant="body1">Price: ${props.bike.bikeType.bikePrice}</Typography>
+        <Card sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%', borderRadius: 'borderRadius' }}>
+            <CardMedia component="img" sx={{ width: '70%', height: '500px' }} image={image} title={type} />
+            <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Typography variant="h6" align="center">
+                    {type}
+                </Typography>
+                <Typography variant="h6" align="center" gutterBottom>
+                    {`$${bikeType.bikePrice.toFixed(2)} per hour`}
+                </Typography>
+                <Button variant="contained" onClick={handleSelect}>
+                    Select
+                </Button>
             </CardContent>
         </Card>
     );
-};
+
+}
