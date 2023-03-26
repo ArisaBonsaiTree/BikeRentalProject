@@ -16,12 +16,10 @@ export function ReservationForm(props) {
     };
 
 
-//   const [currentTime, setCurrentTime] = useState(new Date());
 
     useEffect(() => {
         const interval = setInterval(() => {
             const now = new Date();
-//            setCurrentTime(now);
             props.onStartTimeChange(now);
         }, 1000);
 
@@ -37,6 +35,7 @@ export function ReservationForm(props) {
                 label="Customer Name"
                 value={customerName}
                 onChange={handleCustomerNameChange}
+                required
             />
             <TextField
                 id="num-of-hours"
@@ -44,6 +43,7 @@ export function ReservationForm(props) {
                 type="number"
                 value={numOfHours}
                 onChange={handleNumOfHoursChange}
+                required
             />
         </div>
     );
