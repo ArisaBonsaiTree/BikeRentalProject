@@ -1,81 +1,136 @@
-import React, { useState } from 'react';
-import Carousel from 'react-material-ui-carousel';
-import CarouselComponent from './CarouselComponent';
-import { CheckIn, CheckOut } from './Review';
+import React, { useState, useEffect } from 'react';
+import { CarouselComponent } from './CarouselComponent';
+import { CheckOut } from './Review';
 import Reservation from './Reservation';
+import { ReservationForm } from './Input';
+import Typography from '@mui/material/Typography';
+import { createReservation, getBikesByStation } from '../api/apiCalls';
+import { useLocation } from 'react-router-dom';
 
-function CreateReservation(props) {
 
+// stationId will be passed in as a props
+function CreateReservation() {
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const stationId = searchParams.get('stationId');
+
+    const [bikes, setBikes] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [selectedBikeId, setSelectedBikeId] = useState(null);
-    const [selectedBikePrice, setSelectedBikePrice] = useState(null);
+    const [selectedBikePrice, setSelectedBikePrice] = useState(0);
+    const [customerName, setCustomerName] = useState('');
+    const [numOfHours, setNumOfHours] = useState('');
+    const [startTime, setStartTime] = useState(new Date());
+    const [reservationId, setReservationId] = useState(null);
 
-    // change back to handleSelectBike
+    const handleCustomerNameChange = (newCustomerName) => {
+        setCustomerName(newCustomerName);
+    };
+
+    const handleNumOfHoursChange = (newNumofHours) => {
+        setNumOfHours(newNumofHours);
+    };
+
+    const handleStartTime = (startTime) => {
+        setStartTime(startTime.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }));
+    };
+
     const onSelectBike = (bikeId, bikePrice) => {
         setSelectedBikeId(bikeId);
         setSelectedBikePrice(bikePrice);
     };
 
-    // should eventually be added as props into Carousel based on the station id
-    var bikes = [
-        {
-            id: 1,
-            type: 'Mountain bike',
-        },
-        {
-            id: 2,
-            type: 'Road bike',
-        },
-        {
-            id: 3,
-            type: 'City bike',
-        },
-    ]
+    async function handleSubmit() {
+        const reservation = await createReservation(numOfHours, stationId, customerName, selectedBikeId);
+        setReservationId(reservation.reservationId);
+    }
 
 
-    var bikeMapping = {
-        'Mountain bike': {
-            image: 'https://picsum.photos/600/400?random=1',
-            price: 599,
+    var bikeImages = {
+        'Standard': {
+            image: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/81ozH1S0-WL._AC_SL1500_.jpg',
         },
-        'Road bike': {
-            image: 'https://picsum.photos/600/400?random=2',
-            price: 799,
+        'Electric': {
+            image: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/613TloL9e3L._AC_SL1500_.jpg',
         },
-        'City bike': {
-            image: 'https://picsum.photos/600/400?random=3',
-            price: 399,
+        'Tandem': {
+            image: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/81Fi6V7wciL._AC_SL1500_.jpg',
+        },
+        'Mountain': {
+            image: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/91gEELfSWkL._AC_SX679_.jpg',
+        },
+        'City': {
+            image: 'https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/71QTRS0M7BL._AC_SL1500_.jpg',
         },
     }
 
-    const reservation = {
-        reservationId: "1234",
-        fullName: "John Doe",
-        startTime: "2023-04-01T10:00:00",
-        startStation: "Station A",
-        endTime: "2023-04-01T12:00:00",
-        endStation: "Station B",
-        price: 50.00,
-    };
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await getBikesByStation(stationId);
+                setBikes(response);
+                setLoading(false);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchData();
+    }, [stationId]);
 
-    const checkoutSteps = ['Details', 'Review'];
-    const checkinSteps = ['Check In', 'Review'];
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+
+    function Confirmation(reservationId) {
+        return (
+            <React.Fragment>
+                <Typography variant="h5" gutterBottom>
+                    Thank you for confirming! Your reservationId is {reservationId}.
+                </Typography>
+            </React.Fragment>
+        )
+    }
+
+    const checkoutSteps = ['Check Out', 'Review','Confirmation'];
 
     function getStepContent(step) {
         switch (step) {
             case 0:
-                return <CheckOut reservation={reservation} selectedBikePrice={50.00} />;
+                return <ReservationForm
+                    onCustomerNameChange={handleCustomerNameChange}
+                    onNumOfHoursChange={handleNumOfHoursChange}
+                    onStartTimeChange={handleStartTime}
+                />;
             case 1:
-                return <CheckOut reservation={reservation} selectedBikePrice={50.00} />;
-            default:
-                throw new Error('Unknown step');
+                return <CheckOut customerName={customerName} startTime={startTime}
+                    startStation={stationId} pricePerHour={selectedBikePrice} />
+            case 2:
+                return Confirmation(reservationId);
+
+            throw new Error('Unknown step');
         }
     }
 
     return (
-        <><CarouselComponent bikes={bikes} bikeMapping={bikeMapping} onSelectBike={onSelectBike} /><Reservation steps={checkoutSteps} getStepContent={getStepContent} /></>
-            
-    )
+        <>
+            {selectedBikeId ? (
+                <Reservation
+                    steps={checkoutSteps}
+                    getStepContent={getStepContent}
+                    onSubmit={handleSubmit}
+                />
+            ) : (
+                <CarouselComponent
+                    bikes={bikes}
+                    bikeImages={bikeImages}
+                    onClick={onSelectBike}
+                />
+            )}
+        </>
+    );
 }
 
 
 export default CreateReservation;
+
