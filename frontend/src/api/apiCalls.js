@@ -43,5 +43,21 @@ export async function updateReservation(reservationId, endTime, endStationId, bi
     return response.data;
   } catch (error) {
     throw new Error(error.response.data);
-  }
+    }
+}
+
+export async function createReservation(numOfHours, startStationId, customerName, bikeId) {
+    try {
+        const response = await axios.post(`${baseUrl}/createReservation`, null, {
+            params: {
+                numOfHours,
+                startStationId,
+                customerName,
+                bikeId
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data);
+    }
 }

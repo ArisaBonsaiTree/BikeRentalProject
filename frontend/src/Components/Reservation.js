@@ -1,9 +1,7 @@
 import * as React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -29,7 +27,7 @@ function Copyright() {
 const theme = createTheme();
 
 
-export default function Reservation({ steps, getStepContent}) {
+export default function Reservation({ steps, getStepContent, onSubmit, disabled }) {
     const [activeStep, setActiveStep] = React.useState(0);
 
     const handleNext = () => {
@@ -40,6 +38,10 @@ export default function Reservation({ steps, getStepContent}) {
         setActiveStep(activeStep - 1);
     };
 
+    const handleConfirm = () => {
+        onSubmit();
+        setActiveStep(activeStep + 1);
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -58,27 +60,27 @@ export default function Reservation({ steps, getStepContent}) {
                     </Stepper>
                     {activeStep === steps.length ? (
                         <React.Fragment>
-                            <Typography variant="h5" gutterBottom>
-                                Thank you for confirming!
-                            </Typography>
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
-                            {getStepContent(activeStep)}
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                {activeStep !== 0 && (
-                                    <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                                        Back
-                                    </Button>
-                                )}
-                                <Button
-                                    variant="contained"
-                                    onClick={handleNext}
-                                    sx={{ mt: 3, ml: 1 }}
-                                >
-                                    {activeStep === steps.length - 1 ? 'Confirm' : 'Next'}
-                                </Button>
-                            </Box>
+                                {getStepContent(activeStep)}
+                                {activeStep < steps.length - 1 &&
+                                    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                        {activeStep === 1 && (
+                                            <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+                                                Back
+                                            </Button>
+                                        )}
+                                        <Button
+                                            variant="contained"
+                                            onClick={steps.length - 2 ? handleConfirm : handleNext}
+                                            sx={{ mt: 3, ml: 1 }}
+                                            disabled={activeStep === 0 ? disabled : false}
+                                        >
+                                            {activeStep === steps.length - 2 ? 'Confirm' : 'Next'}
+                                        </Button>
+                                    </Box>
+                                }
                         </React.Fragment>
                     )}
                 </Paper>

@@ -28,11 +28,6 @@ function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/create-reservation">
-                Create Reservation
-              </Link>
-            </li>
-            <li className="nav-item">
               <Link className="nav-link" to="/edit-reservation">
                 Edit Reservation
               </Link>
