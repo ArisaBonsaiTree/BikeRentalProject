@@ -1,10 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
+import { getReservationById } from '../api/apiCalls'
 
 function Confirmation() {
   const location = useLocation();
-  const reservation = location.state.reservation;
+  
+  const reservationId = location.state.reservation;
+
+  const [reservation, setReservation] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    const fetchReservation = async () => {
+      try {
+        const data = await getReservationById(reservationId.reservationId);
+        console.log(reservationId.reservationId)
+        if (data) {
+          setReservation(data);
+        } else {
+          setErrorMessage('No reservation exists with that ID');
+        }
+      } catch (error) {
+        setErrorMessage('Error fetching reservation data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReservation();
+  }, [reservationId]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (errorMessage) {
+    return <p>{errorMessage}</p>;
+  }
 
   return (
     <Container>
