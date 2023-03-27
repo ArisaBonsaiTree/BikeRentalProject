@@ -22,13 +22,25 @@ function CreateReservation() {
     const [numOfHours, setNumOfHours] = useState('');
     const [startTime, setStartTime] = useState(new Date());
     const [reservationId, setReservationId] = useState(null);
+    const [isValid, setIsValid] = useState(false);
 
     const handleCustomerNameChange = (newCustomerName) => {
         setCustomerName(newCustomerName);
+        validateForm();
     };
 
     const handleNumOfHoursChange = (newNumofHours) => {
         setNumOfHours(newNumofHours);
+        validateForm();
+    };
+
+    const validateForm = () => {
+        if (customerName && numOfHours) {
+            setIsValid(true);
+        } else {
+            setIsValid(false);
+        }
+        console.log(isValid);
     };
 
     const handleStartTime = (startTime) => {
@@ -119,6 +131,7 @@ function CreateReservation() {
                     steps={checkoutSteps}
                     getStepContent={getStepContent}
                     onSubmit={handleSubmit}
+                    disabled={!isValid}
                 />
             ) : (
                 <CarouselComponent
