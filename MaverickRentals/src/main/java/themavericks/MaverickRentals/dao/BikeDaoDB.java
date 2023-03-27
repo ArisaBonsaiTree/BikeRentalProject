@@ -18,7 +18,8 @@ public class BikeDaoDB implements BikeDao{
 
     @Autowired
     JdbcTemplate jdbcTemplate;
-
+    
+    @Override
     public List<Bike> findAvailableBikesByStationId(int stationId) {
         String sql = "SELECT * FROM Bike " +
                 "JOIN BikeType USING (bikeTypeId) " +
@@ -26,16 +27,24 @@ public class BikeDaoDB implements BikeDao{
         return jdbcTemplate.query(sql, new Object[]{stationId}, new BikeMapperWithJoin());
     }
 
-
+    @Override
     public List<Bike> findAllAvailableBikes() {
         String sql = "SELECT * FROM Bike JOIN BikeType USING (bikeTypeId) WHERE available = true;";
         return jdbcTemplate.query(sql, new BikeRowMapper());
     }
-
+    
+    @Override
     public List<Bike> findAllBikes() {
         String sql = "SELECT * FROM Bike JOIN BikeType USING (bikeTypeId);";
         return jdbcTemplate.query(sql, new BikeRowMapper());
     }
+
+//    @Override
+//    public void deleteBikeById(int bikeId){
+//        String sql = "DELETE * FROM Bike "
+//                + "WHERE bikeId = ?;";
+//        jdbcTemplate.update(sql, bikeId);
+//    }
 
     @Override
     public void updateBikeAvailability(int bikeId, boolean available) throws CustomException {

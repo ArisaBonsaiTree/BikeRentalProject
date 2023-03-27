@@ -19,5 +19,7 @@ public interface BikeDao {
     BigDecimal getPricePerHour(int bikeId);
 
     void updateBikeStatus(int bikeId, boolean available, int stationId) throws CustomException;
+    
+    //public void deleteBikeById(int bikeId);
 
 }
